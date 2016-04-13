@@ -9,12 +9,17 @@
 import UIKit
 
 class GameboardView : UIView {
+    //矩阵宽高
   var dimension: Int
+    //Tile大小
   var tileWidth: CGFloat
+    //Tile间距
   var tilePadding: CGFloat
+    //圆角半径
   var cornerRadius: CGFloat
+    //Tile字典
   var tiles: Dictionary<NSIndexPath, TileView>
-
+    //提供颜色\外观的代理
   let provider = AppearanceProvider()
 
   let tilePopStartScale: CGFloat = 0.1
@@ -28,7 +33,19 @@ class GameboardView : UIView {
   let tileMergeContractTime: NSTimeInterval = 0.08
 
   let perSquareSlideDuration: NSTimeInterval = 0.08
-
+    //构造方法
+    /**
+     构造方法
+     
+     - parameter d:               矩阵的大小
+     - parameter width:           Tile的宽度
+     - parameter padding:         Tile间距
+     - parameter radius:          圆角半径
+     - parameter backgroundColor: 背景颜色
+     - parameter foregroundColor: Tile颜色
+     
+     - returns: <#return value description#>
+     */
   init(dimension d: Int, tileWidth width: CGFloat, tilePadding padding: CGFloat, cornerRadius radius: CGFloat, backgroundColor: UIColor, foregroundColor: UIColor) {
     assert(d > 0)
     dimension = d
@@ -46,28 +63,32 @@ class GameboardView : UIView {
     fatalError("NSCoding not supported")
   }
   /// Reset the gameboard.
+    //移除所有Tiles
   func reset() {
     for (_, tile) in tiles {
       tile.removeFromSuperview()
     }
     tiles.removeAll(keepCapacity: true)
   }
-
+    
   /// Return whether a given position is valid. Used for bounds checking.
+    //检查位置是否可用
   func positionIsValid(pos: (Int, Int)) -> Bool {
     let (x, y) = pos
     return (x >= 0 && x < dimension && y >= 0 && y < dimension)
   }
-
+    //设置背景的颜色\圆角等
   func setupBackground(backgroundColor bgColor: UIColor, tileColor: UIColor) {
     backgroundColor = bgColor
     var xCursor = tilePadding
     var yCursor: CGFloat
     let bgRadius = (cornerRadius >= 2) ? cornerRadius - 2 : 0
     for _ in 0..<dimension {
+        //偏移量
       yCursor = tilePadding
       for _ in 0..<dimension {
         // Draw each tile
+        //逐列填充
         let background = UIView(frame: CGRectMake(xCursor, yCursor, tileWidth, tileWidth))
         background.layer.cornerRadius = bgRadius
         background.backgroundColor = tileColor
@@ -79,6 +100,7 @@ class GameboardView : UIView {
   }
 
   /// Update the gameboard by inserting a tile in a given location. The tile will be inserted with a 'pop' animation.
+    //插入Tile
   func insertTile(pos: (Int, Int), value: Int) {
     assert(positionIsValid(pos))
     let (row, col) = pos
@@ -86,6 +108,7 @@ class GameboardView : UIView {
     let y = tilePadding + CGFloat(row)*(tileWidth + tilePadding)
     let r = (cornerRadius >= 2) ? cornerRadius - 2 : 0
     let tile = TileView(position: CGPointMake(x, y), width: tileWidth, value: value, radius: r, delegate: provider)
+    //动画添加Tile
     tile.layer.setAffineTransform(CGAffineTransformMakeScale(tilePopStartScale, tilePopStartScale))
 
     addSubview(tile)

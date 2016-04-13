@@ -9,11 +9,13 @@
 import Foundation
 
 /// An enum representing directions supported by the game model.
+//枚举,描述方向
 enum MoveDirection {
   case Up, Down, Left, Right
 }
 
 /// An enum representing a movement command issued by the view controller as the result of the user swiping.
+//每一个MoveCommand包含方向和CompletionHandle
 struct MoveCommand {
   let direction : MoveDirection
   let completion : (Bool) -> ()
@@ -21,12 +23,14 @@ struct MoveCommand {
 
 /// An enum representing a 'move order'. This is a data structure the game model uses to inform the view controller
 /// which tiles on the gameboard should be moved and/or combined.
+//
 enum MoveOrder {
   case SingleMoveOrder(source: Int, destination: Int, value: Int, wasMerge: Bool)
   case DoubleMoveOrder(firstSource: Int, secondSource: Int, destination: Int, value: Int)
 }
 
 /// An enum representing either an empty space or a tile upon the board.
+//描述tile的enum
 enum TileObject {
   case Empty
   case Tile(Int)
@@ -41,6 +45,7 @@ enum ActionToken {
   case DoubleCombine(source: Int, second: Int, value: Int)
 
   // Get the 'value', regardless of the specific type
+    //获得Value
   func getValue() -> Int {
     switch self {
     case let .NoAction(_, v): return v
@@ -50,6 +55,7 @@ enum ActionToken {
     }
   }
   // Get the 'source', regardless of the specific type
+    //获得Source
   func getSource() -> Int {
     switch self {
     case let .NoAction(s, _): return s
@@ -63,14 +69,18 @@ enum ActionToken {
 /// A struct representing a square gameboard. Because this struct uses generics, it could conceivably be used to
 /// represent state for many other games without modification.
 struct SquareGameboard<T> {
+    //矩阵在一个方向的最大元素数量
   let dimension : Int
+    //矩阵保存在数组中
   var boardArray : [T]
 
+    //矩阵构造方法
   init(dimension d: Int, initialValue: T) {
     dimension = d
     boardArray = [T](count:d*d, repeatedValue:initialValue)
   }
 
+    //重载[]运算符,取矩阵元素
   subscript(row: Int, col: Int) -> T {
     get {
       assert(row >= 0 && row < dimension)
@@ -85,6 +95,7 @@ struct SquareGameboard<T> {
   }
 
   // We mark this function as 'mutating' since it changes its 'parent' struct.
+    //要修改struct成员的值必须加mutating标签
   mutating func setAll(item: T) {
     for i in 0..<dimension {
       for j in 0..<dimension {

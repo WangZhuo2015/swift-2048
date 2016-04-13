@@ -8,6 +8,7 @@
 
 import UIKit
 
+//定义接口
 protocol AppearanceProviderProtocol: class {
   func tileColor(value: Int) -> UIColor
   func numberColor(value: Int) -> UIColor
@@ -17,6 +18,7 @@ protocol AppearanceProviderProtocol: class {
 class AppearanceProvider: AppearanceProviderProtocol {
 
   // Provide a tile color for a given value
+    //根据Value的不同返回不同的颜色
   func tileColor(value: Int) -> UIColor {
     switch value {
     case 2:
@@ -39,6 +41,7 @@ class AppearanceProvider: AppearanceProviderProtocol {
   }
 
   // Provide a numeral color for a given value
+    //返回数字的颜色
   func numberColor(value: Int) -> UIColor {
     switch value {
     case 2, 4:
@@ -49,6 +52,7 @@ class AppearanceProvider: AppearanceProviderProtocol {
   }
 
   // Provide the font to be used on the number tiles
+    //返回字体
   func fontForNumbers() -> UIFont {
     if let font = UIFont(name: "HelveticaNeue-Bold", size: 20) {
       return font

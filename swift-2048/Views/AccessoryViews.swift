@@ -13,6 +13,7 @@ protocol ScoreViewProtocol {
 }
 
 /// A simple view that displays the player's score.
+//用于显示分数的View
 class ScoreView : UIView, ScoreViewProtocol {
   var score : Int = 0 {
     didSet {
